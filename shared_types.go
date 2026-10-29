@@ -430,11 +430,11 @@ type ChargeRefunds struct {
 
 // ChargeRefundsSummary is generated from the Tap API reference.
 type ChargeRefundsSummary struct {
-	ChargeAmount      int64 `json:"charge_amount,omitempty"`
-	RefundAmount      int64 `json:"refund_amount,omitempty"`
-	RefundedCount     int64 `json:"refunded_count,omitempty"`
-	RemaingAmount     int64 `json:"remaing_amount,omitempty"`
-	RemaingPercentage int64 `json:"remaing_percentage,omitempty"`
+	ChargeAmount      float64 `json:"charge_amount,omitempty"`
+	RefundAmount      float64 `json:"refund_amount,omitempty"`
+	RefundedCount     int64   `json:"refunded_count,omitempty"`
+	RemaingAmount     float64 `json:"remaing_amount,omitempty"`
+	RemaingPercentage int64   `json:"remaing_percentage,omitempty"`
 }
 
 // ChargeSource is generated from the Tap API reference.

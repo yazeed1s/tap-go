@@ -48,6 +48,13 @@ var guideFields = map[string]S{
 	"CreateRefundDestinationsDestination": {
 		"amount": S{"type": "number", "example": 2},
 	},
+	// the only sample had whole amounts, so these were inferred as
+	// integers. a refund of 5.50 would fail to decode the charge.
+	"ChargeRefundsSummary": {
+		"charge_amount":  S{"type": "number"},
+		"refund_amount":  S{"type": "number"},
+		"remaing_amount": S{"type": "number"},
+	},
 }
 
 // addGuideFields applies guideSchemas and guideFields to a built spec.

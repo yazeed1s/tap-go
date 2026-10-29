@@ -4222,16 +4222,16 @@
       "ChargeRefundsSummary": {
         "properties": {
           "charge_amount": {
-            "type": "integer"
+            "type": "number"
           },
           "refund_amount": {
-            "type": "integer"
+            "type": "number"
           },
           "refunded_count": {
             "type": "integer"
           },
           "remaing_amount": {
-            "type": "integer"
+            "type": "number"
           },
           "remaing_percentage": {
             "type": "integer"

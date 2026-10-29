@@ -370,3 +370,19 @@ func TestCreateChargeWithDestinations(t *testing.T) {
 		t.Errorf("response destinations = %+v", chg.Destinations)
 	}
 }
+
+func TestChargeDecodesDecimalRefundSummary(t *testing.T) {
+	var chg Charge
+	err := json.Unmarshal(
+		[]byte(
+			`{"id":"chg_1","refunds":{"summary":{"charge_amount":10.5,"refund_amount":5.25,"refunded_count":1}}}`,
+		),
+		&chg,
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if chg.Refunds.Summary.RefundAmount != 5.25 {
+		t.Errorf("refund_amount = %v", chg.Refunds.Summary.RefundAmount)
+	}
+}
