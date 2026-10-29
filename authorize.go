@@ -118,6 +118,7 @@ type Authorize struct {
 	Customer            *AuthorizeCustomer         `json:"customer,omitempty"`
 	CustomerInitiated   *bool                      `json:"customer_initiated,omitempty"`
 	Description         string                     `json:"description,omitempty"`
+	Destinations        *ChargeDestinations        `json:"destinations,omitempty"`
 	Gateway             *Gateway                   `json:"gateway,omitempty"`
 	ID                  string                     `json:"id,omitempty"`
 	LiveMode            *bool                      `json:"live_mode,omitempty"`
@@ -313,7 +314,8 @@ type CreateAuthorizeRequest struct {
 	// The customer information.
 	Customer *CreateAuthorizeCustomer `json:"customer,omitempty"`
 	// This parameter determines whether the charge was initiated by customer or not
-	CustomerInitiated *bool `json:"customer_initiated,omitempty"`
+	CustomerInitiated *bool               `json:"customer_initiated,omitempty"`
+	Destinations      *ChargeDestinations `json:"destinations,omitempty"`
 	// The ID of the Merchant Account. Available on the Tap Dashboard (goSell > API Credentials > Merchant ID)
 	Merchant *CreateAuthorizeMerchant `json:"merchant,omitempty"`
 	// Any additional set of information as key/value pairs to be added to the authorization request. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to metadata.

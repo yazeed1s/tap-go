@@ -124,6 +124,28 @@ Tap uses two paging styles, and the iterator handles both: a cursor
 destinations. Authorize, customer, and invoice lists page too, but Tap does
 not document their response, so they have no iterator yet.
 
+## Marketplace splits
+
+`destinations` sends part of a charge to marketplace businesses. Whatever is
+not sent to a destination stays with the marketplace account:
+
+```go
+charge, err := client.Charges.Create(ctx, tap.CreateChargeRequest{
+	// ...
+	Destinations: &tap.ChargeDestinations{Destination: []tap.ChargeDestination{
+		{ID: "480593", Amount: 9.5, Currency: "SAR"},
+	}},
+})
+```
+
+Only Tap's marketplace guide shows this object, so it comes from
+`guideFields` in `internal/cmd/buildspec`, not from a reference page. To add
+guide-only fields to the current spec without fetching the docs:
+
+```sh
+go run ./internal/cmd/buildspec -guide-fields
+```
+
 ## Webhooks
 
 Tap posts the charge, authorize, refund, or invoice to the `post.url` you set

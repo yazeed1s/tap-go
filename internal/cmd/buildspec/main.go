@@ -302,7 +302,22 @@ var methodOrder = []string{"get", "post", "put", "patch", "delete"}
 
 func main() {
 	out := flag.String("out", "ref/api-spec.json", "output spec path")
+	guideOnly := flag.Bool("guide-fields", false, "only apply guide fields to the spec at -out, without fetching the docs")
 	flag.Parse()
+
+	if *guideOnly {
+		spec, err := readSpec(*out)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if err := addGuideFields(spec); err != nil {
+			log.Fatal(err)
+		}
+		if err := writeSpec(*out, spec); err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
 
 	client := &http.Client{Timeout: 30 * time.Second}
 	refSlugs, guideSlugs, err := discoverSlugs(client)
@@ -326,17 +341,13 @@ func main() {
 	for _, w := range b.warnings {
 		fmt.Fprintln(os.Stderr, "warning:", w)
 	}
+	if err := addGuideFields(spec); err != nil {
+		log.Fatal(err)
+	}
 
 	redactKeys(spec)
 
-	var buf bytes.Buffer
-	enc := json.NewEncoder(&buf)
-	enc.SetEscapeHTML(false)
-	enc.SetIndent("", "  ")
-	if err := enc.Encode(spec); err != nil {
-		log.Fatal(err)
-	}
-	if err := os.WriteFile(*out, buf.Bytes(), 0o644); err != nil {
+	if err := writeSpec(*out, spec); err != nil {
 		log.Fatal(err)
 	}
 	fmt.Fprintf(
@@ -344,6 +355,31 @@ func main() {
 		"wrote %s: %d reference pages, %d guides, %d paths, %d schemas, %d samples\n",
 		*out, len(pages), len(guides), len(spec["paths"].(S)), len(b.schemas), b.sampleCount(),
 	)
+}
+
+func readSpec(path string) (S, error) {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	dec := json.NewDecoder(bytes.NewReader(b))
+	dec.UseNumber()
+	var spec S
+	if err := dec.Decode(&spec); err != nil {
+		return nil, fmt.Errorf("decode %s: %w", path, err)
+	}
+	return spec, nil
+}
+
+func writeSpec(path string, spec S) error {
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	enc.SetEscapeHTML(false)
+	enc.SetIndent("", "  ")
+	if err := enc.Encode(spec); err != nil {
+		return err
+	}
+	return os.WriteFile(path, buf.Bytes(), 0o644)
 }
 
 // redactKeys replaces API keys in every string of the spec with a

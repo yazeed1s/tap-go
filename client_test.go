@@ -325,3 +325,48 @@ func TestListAllYieldsError(t *testing.T) {
 		t.Errorf("got %v, err %v, calls %d", got, lastErr, calls)
 	}
 }
+
+func TestCreateChargeWithDestinations(t *testing.T) {
+	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+		var body struct {
+			Destinations struct {
+				Destination []map[string]any `json:"destination"`
+			} `json:"destinations"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatal(err)
+		}
+		d := body.Destinations.Destination
+		if len(d) != 1 || d[0]["id"] != "480593" || d[0]["amount"] != 9.5 ||
+			d[0]["currency"] != "SAR" {
+			t.Errorf("destinations = %v", d)
+		}
+		w.Write(
+			[]byte(
+				`{"id":"chg_1","object":"charge","status":"CAPTURED","amount":10,"currency":"SAR",
+			"destinations":{"amount":9.5,"currency":"SAR","count":1,
+			"destination":[{"id":"480593","amount":9.5,"currency":"SAR"}]}}`,
+			),
+		)
+	})
+	chg, err := client.Charges.Create(context.Background(), CreateChargeRequest{
+		Amount:   10,
+		Currency: "SAR",
+		Customer: CreateChargeCustomer{
+			FirstName: "Test",
+			Email:     "test@example.com",
+		},
+		Source:   CreateChargeSource{ID: SourceAll},
+		Redirect: Redirect{URL: "https://example.com/return"},
+		Destinations: &ChargeDestinations{Destination: []ChargeDestination{
+			{ID: "480593", Amount: 9.5, Currency: "SAR"},
+		}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if chg.Destinations == nil || len(chg.Destinations.Destination) != 1 ||
+		chg.Destinations.Destination[0].Amount != 9.5 {
+		t.Errorf("response destinations = %+v", chg.Destinations)
+	}
+}

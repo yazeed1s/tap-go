@@ -193,7 +193,8 @@ type CreateChargeRequest struct {
 	// This parameter determines whether the charge was initiated by customer or not
 	CustomerInitiated *bool `json:"customer_initiated,omitempty"`
 	// An arbitrary string which you can attach to a ``Charge`` request with more details, if needed.
-	Description string `json:"description,omitempty"`
+	Description  string              `json:"description,omitempty"`
+	Destinations *ChargeDestinations `json:"destinations,omitempty"`
 	// The ID of the Merchant Account. Available on the Tap Dashboard (goSell > API Credentials > Merchant ID)
 	Merchant *CreateChargeMerchant `json:"merchant,omitempty"`
 	// The set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.

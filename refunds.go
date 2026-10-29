@@ -125,9 +125,9 @@ type CreateRefundDestinations struct {
 
 // CreateRefundDestinationsDestination is generated from the Tap API reference.
 type CreateRefundDestinationsDestination struct {
-	Amount   string `json:"amount,omitempty"`
-	Currency string `json:"currency,omitempty"`
-	ID       string `json:"id,omitempty"`
+	Amount   float64 `json:"amount,omitempty"`
+	Currency string  `json:"currency,omitempty"`
+	ID       string  `json:"id,omitempty"`
 }
 
 // CreateRefundRequest is generated from the Tap API reference.

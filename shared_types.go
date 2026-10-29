@@ -75,6 +75,7 @@ type Charge struct {
 	Customer            *ChargeCustomer         `json:"customer,omitempty"`
 	CustomerInitiated   *bool                   `json:"customer_initiated,omitempty"`
 	Description         string                  `json:"description,omitempty"`
+	Destinations        *ChargeDestinations     `json:"destinations,omitempty"`
 	Device              *ChargeDevice           `json:"device,omitempty"`
 	Exchange            *ChargeExchange         `json:"exchange,omitempty"`
 	Gateway             *ChargeGateway          `json:"gateway,omitempty"`
@@ -148,6 +149,27 @@ type ChargeCustomer struct {
 type ChargeCustomerCountry struct {
 	Code string `json:"code,omitempty"`
 	Name string `json:"name,omitempty"`
+}
+
+// ChargeDestination is generated from the Tap API reference.
+type ChargeDestination struct {
+	// The amount sent to this destination.
+	Amount float64 `json:"amount"`
+	// The currency of the amount, same as the charge.
+	Currency string `json:"currency"`
+	// The destination ID of the business receiving this part of the charge.
+	ID string `json:"id"`
+}
+
+// Splits the charge amount between marketplace businesses. Whatever is not sent to a destination stays with the marketplace.
+type ChargeDestinations struct {
+	// The total sent to destinations. Returned in responses.
+	Amount float64 `json:"amount,omitempty"`
+	// The number of destinations. Returned in responses.
+	Count int64 `json:"count,omitempty"`
+	// Returned in responses.
+	Currency    string              `json:"currency,omitempty"`
+	Destination []ChargeDestination `json:"destination,omitempty"`
 }
 
 // ChargeDevice is generated from the Tap API reference.

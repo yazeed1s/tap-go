@@ -279,6 +279,9 @@
             "example": "",
             "type": "string"
           },
+          "destinations": {
+            "$ref": "#/components/schemas/ChargeDestinations"
+          },
           "gateway": {
             "$ref": "#/components/schemas/Gateway"
           },
@@ -3335,6 +3338,9 @@
             "example": "Test Description",
             "type": "string"
           },
+          "destinations": {
+            "$ref": "#/components/schemas/ChargeDestinations"
+          },
           "device": {
             "$ref": "#/components/schemas/ChargeDevice"
           },
@@ -3564,6 +3570,55 @@
           },
           "name": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ChargeDestination": {
+        "properties": {
+          "amount": {
+            "description": "The amount sent to this destination.",
+            "example": 2,
+            "type": "number"
+          },
+          "currency": {
+            "description": "The currency of the amount, same as the charge.",
+            "example": "KWD",
+            "type": "string"
+          },
+          "id": {
+            "description": "The destination ID of the business receiving this part of the charge.",
+            "example": "480593",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "amount",
+          "currency"
+        ],
+        "type": "object"
+      },
+      "ChargeDestinations": {
+        "description": "Splits the charge amount between marketplace businesses. Whatever is not sent to a destination stays with the marketplace.",
+        "properties": {
+          "amount": {
+            "description": "The total sent to destinations. Returned in responses.",
+            "type": "number"
+          },
+          "count": {
+            "description": "The number of destinations. Returned in responses.",
+            "type": "integer"
+          },
+          "currency": {
+            "description": "Returned in responses.",
+            "type": "string"
+          },
+          "destination": {
+            "items": {
+              "$ref": "#/components/schemas/ChargeDestination"
+            },
+            "type": "array"
           }
         },
         "type": "object"
@@ -4783,6 +4838,9 @@
             "example": true,
             "type": "boolean"
           },
+          "destinations": {
+            "$ref": "#/components/schemas/ChargeDestinations"
+          },
           "merchant": {
             "$ref": "#/components/schemas/CreateAuthorizeMerchant",
             "description": "The ID of the Merchant Account. Available on the Tap Dashboard (goSell > API Credentials > Merchant ID)"
@@ -5293,6 +5351,9 @@
             "description": "An arbitrary string which you can attach to a ``Charge`` request with more details, if needed.",
             "example": "Test Description",
             "type": "string"
+          },
+          "destinations": {
+            "$ref": "#/components/schemas/ChargeDestinations"
           },
           "merchant": {
             "$ref": "#/components/schemas/CreateChargeMerchant",
@@ -7089,8 +7150,8 @@
       "CreateRefundDestinationsDestination": {
         "properties": {
           "amount": {
-            "example": "2",
-            "type": "string"
+            "example": 2,
+            "type": "number"
           },
           "currency": {
             "example": "KWD",

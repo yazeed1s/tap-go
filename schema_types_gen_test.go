@@ -62,6 +62,8 @@ var schemaTypes = map[string]func() any{
 	"ChargeBrowser":                                     func() any { return new(ChargeBrowser) },
 	"ChargeCustomer":                                    func() any { return new(ChargeCustomer) },
 	"ChargeCustomerCountry":                             func() any { return new(ChargeCustomerCountry) },
+	"ChargeDestination":                                 func() any { return new(ChargeDestination) },
+	"ChargeDestinations":                                func() any { return new(ChargeDestinations) },
 	"ChargeDevice":                                      func() any { return new(ChargeDevice) },
 	"ChargeDeviceLocation":                              func() any { return new(ChargeDeviceLocation) },
 	"ChargeExchange":                                    func() any { return new(ChargeExchange) },
